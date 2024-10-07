@@ -2,7 +2,9 @@
 import llama_cpp
 
 model_name = 'llama-3-8B-Q8.gguf'
-llm = llama_cpp.Llama(model_path=f"/shared/weights/{model_name}", verbose=False)
+llm = llama_cpp.Llama(
+  model_path=f"/shared/weights/{model_name}",
+  n_gpu_layers=-1,)
 
 llama_prompt_template = "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n{system_message}<|eot_id|><|start_header_id|>user<|end_header_id|>\n{question}<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
 default_system_message = "You are a helpful assistant"
