@@ -1,6 +1,8 @@
 
 ## LLM microservice
 
+Mimimaler LLM microservice, der eine Frage im text - zu - text Modus beantwortet.
+
 ### client
 
 post request an http://metroplex:5100/answer
