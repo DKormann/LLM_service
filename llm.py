@@ -13,4 +13,24 @@ def answer(question:str, system_message=default_system_message, prompt_template=
   return resp['choices'][0]['text']
 
 #%%
-if __name__ == '__main__': print(answer('what is live'))
+def answer_json(question:str, system_message=default_system_message, prompt_template=llama_prompt_template, max_tokens=100, **kwargs):
+  response = llm.create_chat_completion(
+    messages=[
+      {"role": "system", "content": system_message},
+      {"role": "user", "content": question},
+    ],
+    response_format={'type': 'json_object'},
+    max_tokens=max_tokens,
+    **kwargs
+  )
+  return response['choices'][0]['message']['content']
+
+
+#%%
+if __name__ == '__main__':
+  print(answer_json("give me json data about russia containing population, gdp, and area"))
+
+  #%%
+
+  print(answer("give me data about russia containing population, gdp, and area"))
+  

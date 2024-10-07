@@ -28,8 +28,10 @@ ohne Cuda support:
 pip install -r requirements.txt
 ```
 
-### deployment
+### self deployment
 
 ```bash
 python server.py
 ```
+
+### deployed
