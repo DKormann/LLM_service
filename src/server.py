@@ -1,13 +1,13 @@
 import flask
-from functions import Functions
+from functions import LLMFunctions
 
 app = flask.Flask(__name__)
 
 api_docs = ''
 
-for field in dir(Functions):
+for field in dir(LLMFunctions):
   if field[0] != '_':
-    func = getattr(Functions, field)
+    func = getattr(LLMFunctions, field)
     app.route(f'/llm_api/{field}', methods=['POST'], endpoint=field)(lambda: flask.jsonify(func(**flask.request.json)))
     if func.__doc__: api_docs += f'<h3><|host|>/llm_api/{field}</h2><pre>{func.__doc__}</pre>'
 

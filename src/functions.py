@@ -21,7 +21,7 @@ except:
   llm = host_llm()
 
 #%%
-class Functions:
+class LLMFunctions:
   '''Functions to interact with the LLM model.'''
   
   def chat_completion(**kwargs): return llm.create_chat_completion(**kwargs)['choices'][0]['message']['content']
@@ -30,7 +30,7 @@ class Functions:
     '''just answer the question text -> text
     params: {"question": str}
     '''
-    return Functions.chat_completion(
+    return LLMFunctions.chat_completion(
       messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": question}],
       **kwargs)
 
@@ -38,7 +38,7 @@ class Functions:
     '''answer the question with guaranteed json output text -> json
     params: {"question": str}
     '''
-    return Functions.answer(question, response_format={"type":"json_object"})
+    return LLMFunctions.answer(question, response_format={"type":"json_object"})
 
 
   def answer_json_schema(question, schema):
@@ -55,7 +55,7 @@ class Functions:
       "required": ["rechnungs_nummer", "datum"],
     },
     '''
-    return Functions.answer(question,response_format={
+    return LLMFunctions.answer(question,response_format={
       "type": "json_object",
       "schema": schema
     })
@@ -75,7 +75,7 @@ Wenn möglich extrahiere auch: {", ".join(optional_fields)}
 Dokument Text:{text}
 
 Antworte in json format.'''
-    return Functions.answer_json_schema(prompt, {
+    return LLMFunctions.answer_json_schema(prompt, {
       "type": "object",
       "properties": {field: {"type": "string"} for field in required_fields + optional_fields},
       "required": required_fields,
@@ -86,10 +86,10 @@ Antworte in json format.'''
 
 if __name__ == "__main__":
 
-  print(Functions.answer("What is the capital of France?"))
+  print(LLMFunctions.answer("What is the capital of France?"))
 
 
-  print(Functions.answer_json_schema("gib mir beispiel rechnungs daten in json format", 
+  print(LLMFunctions.answer_json_schema("gib mir beispiel rechnungs daten in json format", 
     {
       "type": "object",
       "properties": {
@@ -101,13 +101,12 @@ if __name__ == "__main__":
   ))
 
   #%%
-
-  print(Functions.extract_invoice_information("Rechnung\nRechnungsnummer: 1234\nDatum: 12.12.2021\nBetrag: 1000€", required_fields=["Rechnungsnummer", "Datum"]))
+  print(LLMFunctions.extract_invoice_information("Rechnung\nRechnungsnummer: 1234\nDatum: 12.12.2021\nBetrag: 1000€", required_fields=["Rechnungsnummer", "Datum"]))
 
 #%%
 
-  for fun in dir(Functions):
-    fn = getattr(Functions, fun)
+  for fun in dir(LLMFunctions):
+    fn = getattr(LLMFunctions, fun)
     if fun[0] != "_" and fn.__doc__:
       print(f"{fun}")
       print(f"{fn.__doc__}")
