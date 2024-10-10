@@ -5,14 +5,7 @@ Mimimaler LLM microservice, der eine Frage im text - zu - text Modus beantwortet
 
 ### client
 
-post request an http://metroplex:5100/answer
-
-mit Params:
-```json
-{
-  "question": "Was ist die Hauptstadt von Frankreich?",
-}
-```
+Client API docs: http://metroplex:5100
 
 ### install
 
@@ -35,3 +28,4 @@ python server.py
 ```
 
 ### deployed
+deployed through service@metroplex tmux session
