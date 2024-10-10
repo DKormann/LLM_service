@@ -60,12 +60,14 @@ class LLMFunctions:
       "schema": schema
     })
   
-  def extract_invoice_information(text, required_fields=["Titel", "Datum", "Dokument Typ"], optional_fields=["Betrag", "Rechnungsnummer"]):
+  def extract_invoice_information(text, required_fields=["Titel", "Datum", "Dokument Typ"], optional_fields=["Betrag", "Rechnungsnummer"], additional_prompt=""):
     '''Extrahiert gefragte Daten felder von gescanntem document, garantiert json output
+    Zusätzliche Anweisungen können unter additional_prompt auf deutsch spezifiziert werden.
     params: {
       "text": str,
       "required_fields": List[str] = ["Titel", "Datum", "Dokument Typ"],
-      "optional_fields": List[str] = ["Betrag", "Rechnungsnummer"]
+      "optional_fields": List[str] = ["Betrag", "Rechnungsnummer"],
+      "additional_prompt": str = ''
     }
     '''
 
@@ -74,7 +76,9 @@ Wenn möglich extrahiere auch: {", ".join(optional_fields)}
 
 Dokument Text:{text}
 
-Antworte in json format.'''
+Antworte in json format.
+{additional_prompt}'''
+
     return LLMFunctions.answer_json_schema(prompt, {
       "type": "object",
       "properties": {field: {"type": "string"} for field in required_fields + optional_fields},
@@ -87,8 +91,6 @@ Antworte in json format.'''
 if __name__ == "__main__":
 
   print(LLMFunctions.answer("What is the capital of France?"))
-
-
   print(LLMFunctions.answer_json_schema("gib mir beispiel rechnungs daten in json format", 
     {
       "type": "object",
@@ -100,7 +102,7 @@ if __name__ == "__main__":
     }
   ))
 
-  #%%
+
   print(LLMFunctions.extract_invoice_information("Rechnung\nRechnungsnummer: 1234\nDatum: 12.12.2021\nBetrag: 1000€", required_fields=["Rechnungsnummer", "Datum"]))
 
 #%%
