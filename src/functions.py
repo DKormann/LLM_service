@@ -7,7 +7,7 @@ try:
   print("LLM server is up connecting to it.")
   llm = ClientLLM()
 except:
-  print("LLM server is down. Connecting to local LLM.")
+  print("Launching local LLM.")
   llm = host_llm()
 
 #%%
