@@ -4,8 +4,9 @@ from llm_api import LLM_API
 from pdf_api import PDF_API
 
 apis = [
+  PDF_API,
   LLM_API,
-  PDF_API]
+  ]
 
 app = flask.Flask(__name__)
 
@@ -15,9 +16,12 @@ h1, h2, h3 {{color: #08f;}}
 @media (prefers-color-scheme: light) {body { background-color: #fff; color: #000; }}
 </style>'''
 
-
 def doc_endpoint(docstring, path): app.route(f'/{path}', methods=['GET'], endpoint=path)(lambda: docstring.replace("{host}", flask.request.host) + docs_css)
-def func_endpoint(func, path): app.route(f'/{path}', methods=['POST'], endpoint=path)(lambda: flask.jsonify(func(**flask.request.json)))
+def func_endpoint(func, path):
+  def handler():
+    try: return flask.jsonify(func(**flask.request.json))
+    except: return flask.jsonify(func())
+  app.route(f'/{path}', methods=['POST'], endpoint=path)(handler)
 
 root_docs = '<h2>Local ML Services</h2><p>Available APIs:</p>'
 for api in apis:
