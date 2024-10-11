@@ -7,10 +7,8 @@ def host_llm():
   return llama_cpp.Llama(model_path=f"/shared/weights/{model_name}", verbose=False, n_gpu_layers=-1)
 
 class ClientLLM():
-  def __call__(self, **kwargs):
-    return requests.post('http://metroplex:5100/llm_completion', json=kwargs).json()
-  def create_chat_completion(self, **kwargs):
-    return requests.post('http://metroplex:5100/llm_chat_completion', json=kwargs).json()
+  def __call__(self, **kwargs): return requests.post('http://metroplex:5100/llm_api/llm_call', json=kwargs).json()
+  def create_chat_completion(self, **kwargs): return requests.post('http://metroplex:5100/llm_api/chat_completion', json=kwargs).json()
 
 try:
   requests.get("http://metroplex:5100/")
@@ -21,24 +19,25 @@ except:
   llm = host_llm()
 
 #%%
-class LLMFunctions:
+class LLM_API:
   '''Functions to interact with the LLM model.'''
   
-  def chat_completion(**kwargs): return llm.create_chat_completion(**kwargs)['choices'][0]['message']['content']
+  def llm_call(**kwargs): return llm(**kwargs)
+  def chat_completion(**kwargs): return llm.create_chat_completion(**kwargs)
 
   def answer(question, **kwargs):
     '''just answer the question text -> text
     params: {"question": str}
     '''
-    return LLMFunctions.chat_completion(
+    return LLM_API.chat_completion(
       messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": question}],
-      **kwargs)
+      **kwargs)['choices'][0]['message']['content']
 
   def answer_json(question):
     '''answer the question with guaranteed json output text -> json
     params: {"question": str}
     '''
-    return LLMFunctions.answer(question, response_format={"type":"json_object"})
+    return LLM_API.answer(question, response_format={"type":"json_object"})
 
 
   def answer_json_schema(question, schema):
@@ -55,7 +54,7 @@ class LLMFunctions:
       "required": ["rechnungs_nummer", "datum"],
     },
     '''
-    return LLMFunctions.answer(question,response_format={
+    return LLM_API.answer(question,response_format={
       "type": "json_object",
       "schema": schema
     })
@@ -79,7 +78,7 @@ Dokument Text:{text}
 Antworte in json format.
 {additional_prompt}'''
 
-    return LLMFunctions.answer_json_schema(prompt, {
+    return LLM_API.answer_json_schema(prompt, {
       "type": "object",
       "properties": {field: {"type": "string"} for field in required_fields + optional_fields},
       "required": required_fields,
@@ -90,8 +89,9 @@ Antworte in json format.
 
 if __name__ == "__main__":
 
-  print(LLMFunctions.answer("What is the capital of France?"))
-  print(LLMFunctions.answer_json_schema("gib mir beispiel rechnungs daten in json format", 
+  print(LLM_API.answer("What is the capital of France?"))
+  #%%
+  print(LLM_API.answer_json_schema("gib mir beispiel rechnungs daten in json format", 
     {
       "type": "object",
       "properties": {
@@ -101,14 +101,12 @@ if __name__ == "__main__":
       "required": ["rechnungs_nummer", "datum"],
     }
   ))
-
-
-  print(LLMFunctions.extract_invoice_information("Rechnung\nRechnungsnummer: 1234\nDatum: 12.12.2021\nBetrag: 1000€", required_fields=["Rechnungsnummer", "Datum"]))
+  print(LLM_API.extract_invoice_information("Rechnung\nRechnungsnummer: 1234\nDatum: 12.12.2021\nBetrag: 1000€", required_fields=["Rechnungsnummer", "Datum"]))
 
 #%%
 
-  for fun in dir(LLMFunctions):
-    fn = getattr(LLMFunctions, fun)
+  for fun in dir(LLM_API):
+    fn = getattr(LLM_API, fun)
     if fun[0] != "_" and fn.__doc__:
       print(f"{fun}")
       print(f"{fn.__doc__}")
