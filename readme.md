@@ -6,6 +6,10 @@ Versatile REST API for the local LLM model.
 
 Dynamic client API docs: http://metroplex:5100
 
+### testing frontend
+
+http://metroplex:5100/cloud
+
 ### install
 
 mit Cuda support:

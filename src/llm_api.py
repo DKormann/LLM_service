@@ -1,10 +1,12 @@
 #%%
 import requests
 
+
+model_name = 'llama-3-8B-Q8.gguf'
+
 def host_llm():
   import llama_cpp
-  model_name = 'llama-3-8B-Q8.gguf'
-  return llama_cpp.Llama(model_path=f"/shared/weights/{model_name}", verbose=False, n_gpu_layers=-1)
+  return llama_cpp.Llama(model_path=f"/shared/weights/{model_name}", verbose=False, n_gpu_layers=-1, n_ctx=0)
 
 class ClientLLM():
   def __call__(self, **kwargs): return requests.post('http://metroplex:5100/llm_api/llm_call', json=kwargs).json()
@@ -20,7 +22,7 @@ except:
 
 #%%
 class LLM_API:
-  '''Functions to interact with the LLM model.'''
+  f'''Functions to interact with the LLM model'''
   
   def llm_call(**kwargs): return llm(**kwargs)
   def chat_completion(**kwargs): return llm.create_chat_completion(**kwargs)
@@ -70,6 +72,8 @@ class LLM_API:
     }
     '''
 
+    if len(text) > 8000: text = text[:4000] + '[...]' + text[-4000:]
+
     prompt = f'''Extrahiere folgende Daten von dem gescannten Dokument: {", ".join(required_fields)}
 Wenn möglich extrahiere auch: {", ".join(optional_fields)}
 
@@ -83,7 +87,6 @@ Antworte in json format.
       "properties": {field: {"type": "string"} for field in required_fields + optional_fields},
       "required": required_fields,
     })
-
 
 #%%
 
