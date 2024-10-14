@@ -20,7 +20,7 @@ def server(*handlers, port=5100):
       except: return flask.jsonify(func())
     app.route(f'/{path}', methods=['POST'], endpoint=path)(handler)
 
-  root_docs = '<h2>Local ML Services</h2><p>Available APIs:</p>'
+  root_docs = '<h2>Local ML Services</h2><a href=/cloud>test frontend</a><p>Available APIs:</p>'
   for api in handlers:
     path = api.__name__.lower()
     root_docs += f'<h3><a href="/{path}">{{host}}/{path}</a></h3>' + (f'<pre>{api.__doc__}</pre>' if api.__doc__ else '')
