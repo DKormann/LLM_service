@@ -21,13 +21,19 @@ CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python
 ohne Cuda support:
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ### self deployment
 
 ```bash
-python server.py
+python main.py
+```
+
+### run test
+
+```bash
+python test/*.py
 ```
 
 ### deployed
