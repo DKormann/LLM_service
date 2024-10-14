@@ -16,18 +16,20 @@ function handleFile(file) {handleDocument(file)}
 const ML_api = "http://metroplex:5100/";
 
 class Document{
-  constructor(uuid, file, type, date, title){
-  this.uuid = uuid;
-  this.file = file;
-  this.type = type;
+  constructor(file, type, date, title){
+    this.uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    this.file = file;
+    this.type = type;
     this.date = date;
     this.title = title;
     this.element = document.createElement('tr');
-    this.update();
+    this.update();  
   }
 
-  update() {this.element.innerHTML = `<td>${this.title}</td><td>${this.date}</td><td>${this.type}</td>`}
+  update() {this.element.innerHTML = `<td><a href="/cloud/view/${this.uuid}">open</a> ${this.title}</td><td>${this.date}</td><td>${this.type}</td>`}
 }
+
+
 
 docs_list = [];
 
@@ -35,6 +37,8 @@ function add_doc(doc){
   docs_list.push(doc);
   document.querySelector('#gallery>table').appendChild(doc.element);
 }
+
+add_doc(new Document('file', 'type', 'date', 'title'));
 
 loadr = '<span class="loading">...</span>';
 
@@ -46,7 +50,6 @@ function handleDocument(file){
   let formData = new FormData();
   formData.append('file', file);
 
-  uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
   fetch(ML_api+"pdf_api/handle_pdf", {
     method: 'POST',

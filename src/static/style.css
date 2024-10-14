@@ -28,7 +28,7 @@ table{
 }
 
 tr{
-  border-bottom: 1px solid var(--accent);
+  border-bottom: 1px solid var(--color);
   height: 2em;
 }
 
@@ -54,6 +54,10 @@ textarea, input, button, .button {
   border-radius: 5px;
 }
 
+
+a{
+  color: unset;
+}
 
 .loading{
   animation: wiggle .5s infinite;

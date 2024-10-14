@@ -36,6 +36,7 @@ def server(*handlers, port=5100):
   doc_endpoint(root_docs, '')
     
   app.route("/cloud", methods=['GET'])(lambda: flask.send_from_directory('./static', 'index.html'))
+  app.route("/cloud/view/<path:path>", methods=['GET'], endpoint='view')(lambda path: flask.send_from_directory('./static', 'view.html'))
 
   app.errorhandler(400)(lambda e: ("<h1>400</h1><p>Bad request.</p>"+docs_css, 400))
   app.errorhandler(404)(lambda e: ("<h1>404</h1><p>The resource could not be found.</p>"+docs_css, 404))
