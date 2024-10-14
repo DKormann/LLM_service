@@ -30,6 +30,12 @@ pip install -e .
 python main.py
 ```
 
+development deploy:
+
+```bash 
+python main 8080
+```
+
 ### run test
 
 ```bash

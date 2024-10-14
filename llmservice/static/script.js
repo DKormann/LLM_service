@@ -13,7 +13,9 @@ function handleFiles(files){
 
 function handleFile(file) {handleDocument(file)}
 
-const ML_api = "http://metroplex:5100/";
+const ML_api = `http://${window.location.host}/`;
+
+
 
 class Document{
   constructor(file, type, date, title){
