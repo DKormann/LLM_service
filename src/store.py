@@ -4,7 +4,13 @@ import json
 
 json_data = []
 
-with open("store/index.json", 'r') as f: json_data = json.load(f)
+try: 
+  with open("store/index.json", 'r') as f: json_data = json.load(f)
+except:
+  import os
+  os.makedirs("store", exist_ok=True)
+  with open("store/index.json", 'w') as f: json.dump([], f)
+  json_data = []
 
 class Store:
   """file storage"""

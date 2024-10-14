@@ -30,7 +30,6 @@ class Document{
 }
 
 
-
 docs_list = [];
 
 function add_doc(doc){
