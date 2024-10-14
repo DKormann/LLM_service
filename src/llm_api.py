@@ -22,7 +22,7 @@ except:
 
 #%%
 class LLM_API:
-  f'''Functions to interact with the LLM model'''
+  '''Functions to interact with the LLM model'''
   
   def llm_call(**kwargs): return llm(**kwargs)
   def chat_completion(**kwargs): return llm.create_chat_completion(**kwargs)

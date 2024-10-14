@@ -10,6 +10,7 @@ def server(*handlers, port=5100):
   body { background-color: #111; font-family: Arial, sans-serif; color: #fff; margin: 5em;}
   h1, h2, h3 {{color: #08f;}}
   @media (prefers-color-scheme: light) {body { background-color: #fff; color: #000; }}
+  a{color: unset}
   </style>'''
 
   def doc_endpoint(docstring, path): app.route(f'/{path}', methods=['GET'], endpoint=path)(lambda: docstring.replace("{host}", flask.request.host) + docs_css)
@@ -34,10 +35,7 @@ def server(*handlers, port=5100):
 
   doc_endpoint(root_docs, '')
     
-  @app.route('/cloud')
-  def index():
-    return flask.send_from_directory('./static', 'index.html')
-
+  app.route("/cloud", methods=['GET'])(lambda: flask.send_from_directory('./static', 'index.html'))
 
   app.errorhandler(400)(lambda e: ("<h1>400</h1><p>Bad request.</p>"+docs_css, 400))
   app.errorhandler(404)(lambda e: ("<h1>404</h1><p>The resource could not be found.</p>"+docs_css, 404))

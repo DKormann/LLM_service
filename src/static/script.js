@@ -8,9 +8,7 @@
 document.addEventListener('drop', e=>handleFiles(e.dataTransfer.files), false);
 
 function handleFiles(files){
-  for (let file of files) {
-    handleFile(file);
-  }
+  for (let file of files) {handleFile(file)}
 }
 
 function handleFile(file) {handleDocument(file)}
@@ -18,7 +16,8 @@ function handleFile(file) {handleDocument(file)}
 const ML_api = "http://metroplex:5100/";
 
 class Document{
-  constructor(file, type, date, title){
+  constructor(uuid, file, type, date, title){
+  this.uuid = uuid;
   this.file = file;
   this.type = type;
     this.date = date;
@@ -37,13 +36,17 @@ function add_doc(doc){
   document.querySelector('#gallery>table').appendChild(doc.element);
 }
 
+loadr = '<span class="loading">...</span>';
+
 function handleDocument(file){
   
-    let newDoc = new Document(file, "...", "...", "...");
-    add_doc(newDoc);
+  let newDoc = new Document(file, loadr, loadr, loadr);
+  add_doc(newDoc);
 
   let formData = new FormData();
   formData.append('file', file);
+
+  uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
   fetch(ML_api+"pdf_api/handle_pdf", {
     method: 'POST',
@@ -51,6 +54,7 @@ function handleDocument(file){
   }).then(response => response.json().then(data => {
     let text = data.text
     console.log(text)
+
     fetch(ML_api+"llm_api/extract_invoice_information", {
       method: 'POST',
       body: JSON.stringify({

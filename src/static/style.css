@@ -1,85 +1,70 @@
 body{
-  background-image: url('cloud.jpg');
-  background-position-y: 0vh;
-  background-size: 200vh;
-  background-repeat: repeat;
+
+  --background: #222;
+  --color: white;
+  --accent: #234a73;
+
   text-align: center;
   font-family: monospace;
-  color: white;
+  background-color: var(--background);
+  color: var(--color);
 }
 
-h1{
-  font-size: 5vh;
+@media (prefers-color-scheme: light) {
+  body {
+    --background: rgb(213, 213, 225);
+    --color: black;
+    --accent: #456;
+  }
 }
 
-#drop-area {
-  border: 2px dashed #ccc;
-  border-radius: 20px;
-  width: 480px;
-  margin: 50px auto;
-  padding: 20px;
-}
-
-#drop-area.highlight {
-  border-color: purple;
-}
-
-.my-form {
-  margin-bottom: 10px;
-}
-
-#gallery {
-  margin-top: 10px;
-
-  display: flex;
-  background-color: #b5b5b52e;
-  min-height: 40vh;
-  width: 80vw;
-  margin: auto;
-  border-radius: 2em;
-  backdrop-filter: blur(20px);
-
-  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-
-  flex-wrap: wrap;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-
-  gap: 1em;  
-  padding: 2em;
-}
-
-#gallery>table {
-  display: block;
+table{
+  width: 100%;
   border-collapse: collapse;
-  border-spacing: 0; /* Remove any gaps */
-}
-
-#gallery>table>tr {
+  border-spacing: 0;
   text-align: left;
-  background-color: #007bff92;
-  margin: 1em;
-  padding: 1em;
-  border-bottom: 1px solid transparent;
-  border-bottom: 2px dashed #ccc;
+  margin: 4em auto;
+  width: 60%;
 }
 
-#gallery>table>tr:last-child {
-  border-bottom: none; /* Remove bottom border for the last row */
+tr{
+  border-bottom: 1px solid var(--accent);
+  height: 2em;
 }
 
-#gallery>table>tr>td {
-  border: none;  /* No borders between columns */
-  margin: 1em;
-  padding: 1em;  /* Optional padding for cells */
+th{
+  max-width: 20em;
 }
-.button {
+
+#command_bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+
+textarea, input, button, .button {
   display: inline-block;
   padding: 10px 20px;
   cursor: pointer;
-  background: #007bff;
-  color: white;
+  color: var(--color);
+  background-color: unset;
+  border: 1px solid var(--color);
   border-radius: 5px;
 }
+
+
+.loading{
+  animation: wiggle .5s infinite;
+  }
+
+@keyframes wiggle {
+  0%, 100% {
+    transform:translateY(0);
+  }
+  50% {
+    transform:translateY(-10px);
+  }
+}
+

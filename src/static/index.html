@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Cloud</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -11,10 +11,29 @@
   
   <h1>Cloud</h1>
   <div id="gallery">
-    <input type="file" id="fileElem" multiple accept="*/*" onchange="handleFiles(this.files)" style="display:none">
-    <label for="fileElem" class="button">Select or drop files</label>
 
-    <table> </table>
+
+    <table>
+
+      <tr>
+        <th>Name</th>
+        <th>Datum</th>
+        <th>Typ</th>
+      </tr>
+
+      <tr>
+        <td>File 1</td>
+        <td>01.01.2020</td>
+        <td>PDF</td>
+      </tr>
+
+    </table>
+
+    <div id="command_bar">
+      <textarea type="text" name="searchbar" placeholder="Dokument suchen" rows="1"></textarea>
+      <input type="file" id="fileElem" multiple accept="*/*" onchange="handleFiles(this.files)" style="display:none">
+      <label for="fileElem" class="button">Dokument hinzufügen</label>
+    </div>
 
   </div>
 
