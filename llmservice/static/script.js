@@ -15,8 +15,6 @@ function handleFile(file) {handleDocument(file)}
 
 const ML_api = `http://${window.location.host}/`;
 
-
-
 class Document{
   constructor(file, type, date, title){
     this.uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
