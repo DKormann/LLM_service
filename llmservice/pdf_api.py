@@ -1,4 +1,3 @@
-import filetype
 from PIL import Image
 import fitz as pymupdf
 import easyocr
