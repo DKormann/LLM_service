@@ -16,6 +16,7 @@ class PDF_API:
     uploaded_file = flask.request.files['file']
     extracted_text = PDF_API.get_text_from_document(uploaded_file)
     return {'text': extracted_text}
+
   @staticmethod
   def get_text_from_document(uploaded_file):
     raw_text = ""
@@ -34,14 +35,3 @@ class PDF_API:
     for image in images:
       raw_text += "\n".join([result[1] for result in reader.readtext(np.array(image))]) + "\n"
     return raw_text
-
-
-#%%
-
-from werkzeug.datastructures import FileStorage
-
-with open("./test/doc.pdf", "rb") as f:
-  file = FileStorage(f, content_type="application/pdf")
-
-  print(file.filename)
-  print(file.mimetype)

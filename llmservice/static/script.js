@@ -29,15 +29,13 @@ class Document{
   update() {this.element.innerHTML = `<td><a href="/cloud/view/${this.uuid}">open</a> ${this.title}</td><td>${this.date}</td><td>${this.type}</td>`}
 }
 
-
 docs_list = [];
-
 function add_doc(doc){
   docs_list.push(doc);
   document.querySelector('#gallery>table').appendChild(doc.element);
 }
 
-add_doc(new Document('file', 'type', 'date', 'title'));
+// add_doc(new Document('file', 'type', 'date', 'title'));
 
 loadr = '<span class="loading">...</span>';
 
@@ -55,13 +53,13 @@ function handleDocument(file){
     body: formData,
   }).then(response => response.json().then(data => {
     let text = data.text
-    console.log(text)
+    console.log({text})
 
     fetch(ML_api+"llm_api/extract_invoice_information", {
       method: 'POST',
       body: JSON.stringify({
         text: text,
-        required_fields: ["Datum", "Dokement Typ", "Titel", "Zusammenfassung"],
+        required_fields: ["Datum", "Dokument Typ", "Titel", "Zusammenfassung"],
         optional_fields: ["Betrag", "Rechnungsnummer", "Kundennummer", "Assoziierte Personen"],
         additional_prompt: 'Wenn kein Datum gegeben ist, setze es auf NA ansonsten gib es im format 30.12.2020 an. Wenn kein Tag gegeben ist setze es auf 01.\nIn der Zusammenfassung gib eine Beschreibung des Dokuments an in einem Satz an.'
       }),
@@ -69,7 +67,7 @@ function handleDocument(file){
     }).then(response => response.json().then(data => {
       data = JSON.parse(data);
       console.log(data)
-      newDoc.type = data["Dokement Typ"];
+      newDoc.type = data["Dokument Typ"];
       newDoc.date = data["Datum"];
       newDoc.title = data["Titel"];
       newDoc.update();
